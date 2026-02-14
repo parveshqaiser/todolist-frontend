@@ -35,7 +35,7 @@ const LoginPage = () => {
                     <input
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase() || "")}
                         className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:bg-white outline-none transition-all duration-200"
                         placeholder="Enter your username"
                     />
@@ -53,7 +53,7 @@ const LoginPage = () => {
                 </div>
 
                 <button
-                    className="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    className="w-full cursor-pointer bg-linear-to-r from-purple-600 to-pink-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                 >
                     Sign In
                 </button>
@@ -64,7 +64,7 @@ const LoginPage = () => {
                     Don't have an account?{' '}
                     <Link to={"/register"}>
                     <button
-                        className="text-purple-600 font-bold hover:text-pink-600 transition-colors"
+                        className="text-purple-600 font-bold hover:text-pink-600 transition-colors cursor-pointer"
                     >
                         Create one
                     </button>
