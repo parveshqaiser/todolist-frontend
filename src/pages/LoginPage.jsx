@@ -1,11 +1,49 @@
 
+import axios from 'axios';
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/api';
 
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [isDisable, setIsDisable] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleLogin =async ()=>{
+
+        let data = {
+            username : username.trim(),
+            password : password.trim(),
+        };
+
+        if(!username.trim() || !password.trim()){
+            toast.error("All Fields are required");
+            return;
+        }
+
+        try {
+            let res = await axios.post(`${BASE_URL}/user/login`, data, {withCredentials:true});
+            if(res.data.success){
+                toast.success(res.data.message);
+                localStorage.setItem("accessToken", res.data.accessToken);
+                localStorage.setItem("refreshToken", res.data.refreshToken);
+                setTimeout(()=>{
+                    setUsername("");
+                    setPassword("");
+                    setIsDisable(false);
+                    navigate("/home")
+                },1800)
+            }            
+        } catch (error) {
+            setIsDisable(false);
+            toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+        }
+    }
 
     return(
     <main className="min-h-screen flex items-center justify-center p-4" style={{
@@ -29,7 +67,7 @@ const LoginPage = () => {
             <p className="text-gray-600">Your tasks are waiting for you</p>
             </div>
 
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={(e)=> e.preventDefault()}>
                 <div className="space-y-2">
                     <label className="block text-sm font-semibold text-gray-700">Username</label>
                     <input
@@ -53,6 +91,7 @@ const LoginPage = () => {
                 </div>
 
                 <button
+                onClick={handleLogin}
                     className="w-full cursor-pointer bg-linear-to-r from-purple-600 to-pink-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                 >
                     Sign In
