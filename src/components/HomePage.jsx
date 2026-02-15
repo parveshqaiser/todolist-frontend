@@ -1,4 +1,6 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import { api } from '../utils/api';
+import toast from 'react-hot-toast';
 
 let initialTasks = [
     {
@@ -37,10 +39,12 @@ let initialTasks = [
 
 const HomePage = () => {
 
+
     const [tasks, setTasks] = useState(initialTasks);
     const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+   
 
     const filteredTasks = tasks.filter(task =>
         task.title.toLowerCase().includes(searchQuery?.trim().toLowerCase()) ||

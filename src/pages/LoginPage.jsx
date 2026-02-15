@@ -1,14 +1,17 @@
 
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/api';
+import { AuthContext } from '../utils/authContext';
 
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    let {isAuthenticated,setIsAuthenticated} = useContext(AuthContext);
 
     const [isDisable, setIsDisable] = useState(false);
 
@@ -29,9 +32,10 @@ const LoginPage = () => {
         try {
             let res = await axios.post(`${BASE_URL}/user/login`, data, {withCredentials:true});
             if(res.data.success){
+                setIsAuthenticated(true);
                 toast.success(res.data.message);
-                localStorage.setItem("accessToken", res.data.accessToken);
-                localStorage.setItem("refreshToken", res.data.refreshToken);
+                // localStorage.setItem("accessToken", res.data.accessToken);
+                // localStorage.setItem("refreshToken", res.data.refreshToken);
                 setTimeout(()=>{
                     setUsername("");
                     setPassword("");
