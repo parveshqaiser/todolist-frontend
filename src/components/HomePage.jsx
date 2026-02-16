@@ -1,19 +1,23 @@
 import React, {useContext, useEffect, useState} from 'react'
-import { initialTasks } from '../utils/constants';
+
 import { UserContext } from './Body';
-import { Button,Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { getPriorityColor, getStatusColor, initialInputValues } from '../utils/constants';
 import { api } from '../utils/api';
 import toast from 'react-hot-toast';
+import useFetchTask from '../hooks/useFetchTask';
 
 const HomePage = () => {
 
-    let {task} = useContext(UserContext);
+    // let {task} = useContext(UserContext);
+    let {userData} = useContext(UserContext);
+    let {loading: loadingTask ,task , refetch} = useFetchTask();
 
-    const [tasks, setTasks] = useState(task);
+    const [tasks, setTasks] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTask, setSelectedTask] = useState(null);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [inputValues, setInputValues] = useState({
         title : "",
         description : "",
@@ -22,7 +26,8 @@ const HomePage = () => {
         dueDate :"",
     });
 
-    const filteredTasks = tasks && tasks.filter(item =>
+
+    const filteredTasks = tasks && tasks?.filter(item =>
         item.title?.toLowerCase().includes(searchQuery?.trim().toLowerCase()) ||
         item.description?.toLowerCase().includes(searchQuery?.trim().toLowerCase())
     );
@@ -39,6 +44,12 @@ const HomePage = () => {
         }       
     }
 
+    useEffect(() => {
+        if (task) {
+            setTasks(task);
+        }
+    }, [task]);
+
     const handleSubmit= async()=>{
 
         let createTask = {
@@ -46,18 +57,43 @@ const HomePage = () => {
             status : inputValues.status || "Pending",
             priority : inputValues.priority || "Low"
         };
-        console.log(createTask);
+        // console.log(createTask);
 
-        try {
+        let updateTask = {
+            title : inputValues.title,
+            description : inputValues.description,
+            status : inputValues.status,
+            priority : inputValues.priority, 
+            dueDate : inputValues.dueDate,
+        };
+
+        if(isEdit)
+        {
+            try {
+                let res = await api.put(`/task/${inputValues._id}`,updateTask);
+                if(res.data.success){
+                    toast.success(res.data.message);
+                    setIsOpen(false);
+                    setIsEdit(false)
+                    refetch();
+                    setInputValues(initialInputValues);
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+            }
+        }else {
+            try {
             let res = await api.post("/task",createTask);
             if(res.data.success){
                 toast.success(res.data.message);
                 setIsOpen(false);
+                refetch();
                 setInputValues(initialInputValues);
             }
-        } catch (error) {
-            toast.error(error?.response?.data?.message || error?.message, {duration:2000})
-        }
+            } catch (error) {
+                toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+            }
+        }       
     }   
 
     const formatDate = (dateStr) => {
@@ -65,6 +101,10 @@ const HomePage = () => {
         const date = new Date(year, month - 1, day);
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     };
+
+    if(loadingTask){
+        return null;
+    }
 
     return (
     <>
@@ -130,8 +170,8 @@ const HomePage = () => {
                         <div className="col-span-2 text-right">Actions</div>
                     </div>
 
-                    <div className="max-h-[calc(100vh-320px)] overflow-y-auto">
-                        {filteredTasks.length === 0 ? (
+                    <div className="max-h-[calc(100vh-320px)] overflow-y-auto" >
+                        {Array.isArray(filteredTasks) && filteredTasks?.length === 0 ? (
                             <div className="text-center py-12">
                                 <svg className="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -139,13 +179,14 @@ const HomePage = () => {
                                 <p className="text-slate-500">No tasks found</p>
                             </div>
                         ) : (
-                            filteredTasks.map((task) => (
+                            filteredTasks?.map((task) => (
                                 <div
                                     key={task.id}
                                     className="grid grid-cols-12 min-w-187.5 gap-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer"
-                                    onClick={() => setSelectedTask(task)}
+                                    onClick={(e) =>{setSelectedTask(task)}}
                                 >
                                     <div className="col-span-4">
+                                        {console.log(task)}
                                         <h3 className="font-medium text-slate-800">{task.title}</h3>
                                         {task.desc && <p className="text-sm text-slate-500 mt-1 truncate">{task.desc}</p>}
                                     </div>
@@ -166,7 +207,8 @@ const HomePage = () => {
                                         {formatDate(task.dueDate)}
                                     </div>
                                     <div className="col-span-2 flex items-center justify-end gap-2">
-                                        <button 
+                                        <button
+                                            onClick={(e)=>{e.stopPropagation(), setInputValues(task),setIsEdit(true), setIsOpen(true)}} 
                                             className="p-2 hover:bg-slate-200 rounded-md transition-colors"
                                         >
                                             <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,8 +229,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-            
-            {/* summary */}
+
             <div className="md:mt-6 mt-3 grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2">
                 <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
                     <p className="text-sm text-slate-500 mb-1">Total Tasks</p>
@@ -212,7 +253,7 @@ const HomePage = () => {
         {/* Task Detail Modal */}
         {selectedTask && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setSelectedTask(null)}>
-                <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
+                <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6">
                     <div className="flex justify-between items-start mb-4">
                         <h2 className="text-xl font-bold text-slate-800">{selectedTask.title}</h2>
                         <button onClick={() => setSelectedTask(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
@@ -255,7 +296,7 @@ const HomePage = () => {
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <DialogPanel className="w-full max-w-lg rounded-2xl bg-zinc-900 p-8 shadow-2xl border border-white/10">
                     <DialogTitle className="text-xl font-semibold text-white mb-4">
-                        Create Task
+                        {isEdit ? "Update Task" : "Create Task"}
                     </DialogTitle>
 
                     <form className="space-y-2" onSubmit={(e)=>e.preventDefault()}>
@@ -286,16 +327,26 @@ const HomePage = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm text-white/70 mb-2">Status</label>
-                                <select name='status' onChange={handleChange} className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select 
+                                    value={inputValues.status}
+                                    name='status' 
+                                    onChange={handleChange} 
+                                    className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                >
                                     <option selected value="Pending">Pending</option>
-                                    <option value="In-Progess">In Progress</option>
+                                    <option value="In-Progress">In Progress</option>
                                     <option value="Completed">Completed</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label className="block text-sm text-white/70 mb-2">Priority</label>
-                                <select  name='priority' onChange={handleChange} className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select 
+                                    value={inputValues.priority}
+                                    name='priority' 
+                                    onChange={handleChange} 
+                                    className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                >
                                     <option selected>Low</option>
                                     <option >Medium</option>
                                     <option >High</option>
@@ -306,14 +357,14 @@ const HomePage = () => {
                         <div>
                             <label className="block text-sm text-white/70 mb-2">Due Date</label>
                             <div className="bg-zinc-300 p-3 rounded-sm border border-white/10">
-                                <input type="date" onChange={(e)=> setInputValues({...inputValues, dueDate:e.target.value})} />
+                                <input type="date" value={inputValues.dueDate} onChange={(e)=> setInputValues({...inputValues, dueDate:e.target.value})} />
                             </div>
                         </div>
 
                         <div className="flex justify-end gap-3 pt-4">
                             <button
                                 type="button"
-                                onClick={()=> {setIsOpen(false),setInputValues(initialInputValues)}}
+                                onClick={()=> {setIsOpen(false), setIsEdit(false),setInputValues(initialInputValues)}}
                                 className="px-4 py-2 rounded-lg bg-zinc-700 text-white hover:bg-zinc-600 transition"
                             >
                                 Cancel
@@ -323,7 +374,7 @@ const HomePage = () => {
                                 onClick={handleSubmit}
                                 className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
                             >
-                                Create Task
+                                {isEdit ? "Update Task" : "Create Task"}
                             </button>
                         </div>
                     </form>
