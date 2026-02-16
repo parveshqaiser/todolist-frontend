@@ -1,16 +1,27 @@
 
-import React, {useEffect, useState } from 'react';
+import React, {useContext, useState } from 'react';
 import { api } from '../utils/api';
+import { UserContext } from './Body';
+import toast from 'react-hot-toast';
 
 const ProfilePage = () => {
 
-    const [fullName, setFullName] = useState('Virat Kohli');
+	let {userData} = useContext(UserContext);
+
+    const [fullName, setFullName] = useState(userData?.fullName);
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(fullName);
 
-    const handleUpdate = () => {
-        setFullName(tempName);
-        setIsEditing(false);
+    const handleUpdate = async() => {
+		try {
+			let res = await api.patch(`user/${userData?._id}`,{fullName : tempName});
+			if(res.data.message){
+                toast.success(res.data.message);
+ 				setIsEditing(false);
+			}
+		} catch (error) {
+			toast.error(error?.response?.data?.message || error?.message)
+		}
     };
 
     const stats = {
@@ -23,17 +34,10 @@ const ProfilePage = () => {
         longestStreak: 28
     };
 
-    const achievements = [
-        { icon: '🏆', title: 'Early Bird', desc: 'Completed 10 tasks before 9 AM' },
-        { icon: '🔥', title: 'Hot Streak', desc: '7 days in a row' },
-        { icon: '⚡', title: 'Speed Demon', desc: 'Finished 5 tasks in one day' },
-        { icon: '🎯', title: 'Perfectionist', desc: '95% on-time completion' }
-    ];
-
     return (
 	<main className="min-h-screen px-4 sm:px-6 py-8 max-w-7xl mx-auto">
 		
-		<header className="mb-8">
+		<header className="mb-6">
 			<h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">Profile</h1>
 			<p className="text-slate-500">Manage your account and view your progress</p>
 		</header>
@@ -49,8 +53,8 @@ const ProfilePage = () => {
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 							</svg>
 						</div>
-						<h2 className="text-2xl font-bold mb-1">{fullName}</h2>
-						<p className="text-blue-100 text-sm mb-4">@viratkohli</p>
+						<h2 className="text-2xl font-bold mb-1">{userData && userData?.fullName || "John Doe"}</h2>
+						<p className="text-blue-100 text-sm mb-4">@ {userData?.username}</p>
 						<div className="flex gap-4 text-center">
 							<div>
 								<p className="text-2xl font-bold">{stats.currentStreak}</p>
@@ -74,11 +78,11 @@ const ProfilePage = () => {
 							<label className="block text-sm font-medium text-slate-600 mb-2">Username</label>
 							<input
 								type="text"
-								value="viratkohli"
+								value={userData?.username}
 								readOnly
 								className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed"
 							/>
-							<p className="text-xs text-slate-400 mt-1">Username cannot be changed</p>
+							<p className="text-xs text-red-600 mt-1">Username cannot be changed</p>
 						</div>
 
 						<div>
@@ -87,7 +91,11 @@ const ProfilePage = () => {
 								<input
 									type="text"
 									value={tempName}
-									onChange={(e) => setTempName(e.target.value)}
+									onChange={(e) => {
+										let val = e.target.value;
+										val = val.charAt(0).toUpperCase() + val.slice(1);
+										setTempName(val);
+									}}
 									className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 									autoFocus
 								/>
@@ -167,26 +175,7 @@ const ProfilePage = () => {
 					</div>
 				</div>
 
-				{/* Achievements */}
-				<div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-					<h3 className="text-lg font-semibold text-slate-800 mb-4">Achievements</h3>
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						{achievements.map((achievement, index) => (
-							<div 
-								key={index}
-								className="flex items-start gap-3 p-4 bg-linear-to-br from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-shadow"
-							>
-								<div className="text-3xl">{achievement.icon}</div>
-								<div>
-									<h4 className="font-semibold text-slate-800 mb-1">{achievement.title}</h4>
-									<p className="text-sm text-slate-500">{achievement.desc}</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				{/* Activity Summary */}
+		{/* Activity Summary */}
 				<div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
 					<h3 className="text-lg font-semibold text-slate-800 mb-4">Activity Summary</h3>
 					<div className="space-y-3">
