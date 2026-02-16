@@ -34,8 +34,6 @@ const LoginPage = () => {
             if(res.data.success){
                 // setIsAuthenticated(true);
                 toast.success(res.data.message);
-                // localStorage.setItem("accessToken", res.data.accessToken);
-                // localStorage.setItem("refreshToken", res.data.refreshToken);
                 setTimeout(()=>{
                     setUsername("");
                     setPassword("");

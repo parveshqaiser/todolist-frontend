@@ -1,12 +1,54 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../utils/api";
+import toast from "react-hot-toast";
 
  const RegisterPage = () => {
 
-	const [username, setUsername] = useState('');
-	const [fullname, setFullname] = useState('');
-	const [password, setPassword] = useState('');
+	const navigate = useNavigate();
+
+	const [form, setForm] = useState({
+		fullName :"",
+		username : "",
+		password :"",
+	});
+
+	const handleClick = async()=>{
+		
+		let {fullName,username, password} = form;
+
+		if(Object.values(form).some(val => val =="")){
+			return toast.error("All Fields are required");
+		}
+
+		if(password.length <5){
+			return toast.error("Password min 6 char")
+		}
+
+		let register = {
+			fullName : fullName.charAt(0).toUpperCase() + fullName.slice(1),
+			username,
+			password
+		};
+
+		console.log(register);
+		try {
+			let res = await api.post("/user", register);
+			console.log(res.data);
+
+
+			 if(res.data.message){
+                toast.success(res.data.message);
+				setTimeout(()=>{
+					navigate("/");
+				},1500)
+            }     
+		} catch (error) {
+			toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+		}
+
+	}
 
 
     return (
@@ -20,7 +62,7 @@ import { Link } from "react-router-dom";
 			<div className="text-center mb-2">
 				<div className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-pink-500 to-orange-500 rounded-2xl mb-4 shadow-lg transform -rotate-3 hover:-rotate-6 transition-transform">
 					<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3mz-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0M3 20a6 6 0 0112 0v1H3v-1z" />
 					</svg>
 				</div>
 				<h1 className="text-2xl font-bold bg-linear-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent mb-2">
@@ -34,8 +76,9 @@ import { Link } from "react-router-dom";
 					<label className="block text-sm font-semibold text-gray-700">Full Name</label>
 					<input
 						type="text"
-						value={fullname}
-						onChange={(e) => setFullname(e.target.value)}
+						name="fullName"
+						value={form.fullName}
+						onChange={(e)=> setForm({...form , fullName:e.target.value})}
 						className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
 						placeholder="Foo Bear"
 					/>
@@ -45,8 +88,9 @@ import { Link } from "react-router-dom";
 					<label className="block text-sm font-semibold text-gray-700">Username</label>
 					<input
 						type="text"
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
+						minLength={6}
+						value={form.username}
+						onChange={(e)=> setForm({...form , username:e.target.value.trim()})}
 						className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
 						placeholder="foobear"
 					/>
@@ -56,15 +100,16 @@ import { Link } from "react-router-dom";
 					<label className="block text-sm font-semibold text-gray-700">Password</label>
 					<input
 						type="password"
-						value={password}
+						value={form.password}
 						minLength={6}
-						onChange={(e) => setPassword(e.target.value)}
+						onChange={(e)=> setForm({...form , password:e.target.value})}
 						className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
 						placeholder="Min. 6 characters"
 					/>
 				</div>
 
 				<button
+					onClick={handleClick}
 					className="w-full cursor-pointer bg-linear-to-r from-pink-600 to-orange-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
 				>
 					Create Account
