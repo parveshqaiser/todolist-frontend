@@ -16,16 +16,16 @@ const App = ()=>{
 	<>
 	<Toaster position="top-center" reverseOrder={false}></Toaster>
 		<BrowserRouter>	
-			<AuthProvider>
+			{/* <AuthProvider> */}
 				<Routes>
 					<Route index path="/" element={<LoginPage />}/>
 					<Route path="/register" element={<RegisterPage/>}/>
-					<Route path="/home" element={<ProtectedRoute> <Body/> </ProtectedRoute>}>
+					<Route path="/home" element={ <Body/>}>
 						<Route index element={<HomePage />} />
 						<Route path="profile" element={<ProfilePage />} />
 					</Route>
 				</Routes>
-			</AuthProvider>
+			{/* </AuthProvider> */}
 		</BrowserRouter>
 	</>
 	)

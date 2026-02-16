@@ -8,10 +8,6 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(fullName);
 
-	useEffect(()=>{
-		console.log("use effect")
-	},[])
-
     const handleUpdate = () => {
         setFullName(tempName);
         setIsEditing(false);

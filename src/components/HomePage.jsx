@@ -1,81 +1,64 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
+import { initialTasks } from '../utils/constants';
+import { UserContext } from './Body';
+import { Button,Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import { getPriorityColor, getStatusColor, initialInputValues } from '../utils/constants';
 import { api } from '../utils/api';
 import toast from 'react-hot-toast';
 
-let initialTasks = [
-    {
-        id:1,
-        title : "Complete Nodejs",
-        desc : "Nodejs has various modules",
-        status : "Pending",
-        priority : "Low",
-        dueDate : "12-01-2026"
-    },
-     {
-        id:2,
-        title : "Complete React",
-        desc : "React course of Akshai Saini",
-        status : "In-Progress",
-        priority : "High",
-        dueDate : "01-03-2026"
-    },
-     {
-        id:3,
-        title : "Complete Project",
-        desc : "This project is meant to enhance your frontend skills",
-        status : "Pending",
-        priority : "Medium",
-        dueDate : "12-01-2026"
-    },
-    {
-        id:4,
-        title : "Complete SQL",
-        desc : "learn from prashant",
-        status : "Completed",
-        priority : "Medium",
-        dueDate : "12-01-2026"
-    }
-];
-
 const HomePage = () => {
 
+    let {task} = useContext(UserContext);
 
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, setTasks] = useState(task);
     const [searchQuery, setSearchQuery] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
-   
+    const [isOpen, setIsOpen] = useState(false)
+    const [inputValues, setInputValues] = useState({
+        title : "",
+        description : "",
+        status : "",
+        priority: "",
+        dueDate :"",
+    });
 
-    const filteredTasks = tasks.filter(task =>
-        task.title.toLowerCase().includes(searchQuery?.trim().toLowerCase()) ||
-        task.desc.toLowerCase().includes(searchQuery?.trim().toLowerCase())
+    const filteredTasks = tasks && tasks.filter(item =>
+        item.title?.toLowerCase().includes(searchQuery?.trim().toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchQuery?.trim().toLowerCase())
     );
 
-    const getPriorityColor = (priority) => {
-        switch (priority) {
-            case 'High': 
-                return 'bg-red-100 text-red-700 border-red-300';
-            case 'Medium': 
-                return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-            case 'Low': 
-                return 'bg-green-100 text-green-700 border-green-300';
-            default: 
-                return 'bg-gray-100 text-gray-700 border-gray-300';
-        }
-    };
+    const handleChange =(e)=>{
+        let {name,value} = e.target;
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'Completed': 
-                return 'bg-green-500 text-white';
-            case 'In-Progress': 
-                return 'bg-yellow-500 text-white';
-            case 'Pending': 
-                return 'bg-gray-400 text-white';
-            default: 
-                return 'bg-gray-400 text-white';
+        if(name=="title" || name =="description"){
+            let val = value && value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+           setInputValues({...inputValues,[name]: val});
         }
-    };
+        else if(name =="status" || name =="priority"){
+            setInputValues({...inputValues,[name] : value})
+        }       
+    }
+
+    const handleSubmit= async()=>{
+
+        let createTask = {
+            ...inputValues,
+            status : inputValues.status || "Pending",
+            priority : inputValues.priority || "Low"
+        };
+        console.log(createTask);
+
+        try {
+            let res = await api.post("/task",createTask);
+            if(res.data.success){
+                toast.success(res.data.message);
+                setIsOpen(false);
+                setInputValues(initialInputValues);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+        }
+    }   
 
     const formatDate = (dateStr) => {
         const [day, month, year] = dateStr.split('-');
@@ -114,8 +97,8 @@ const HomePage = () => {
 
                 <button
                     type="button"
-                    onClick={() => setIsModalOpen(true)}
-                    className="w-full min-[450px]:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2"
+                    onClick={() => setIsOpen(true)}
+                    className="w-full cursor-pointer min-[450px]:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2"
                 >
                     <svg
                         className="w-5 h-5"
@@ -135,8 +118,6 @@ const HomePage = () => {
             </div>
         </section>
 
-
-        {/* Tasks Section */}
         <section className="max-w-7xl mx-auto px-6 pb-8">
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 
@@ -187,10 +168,6 @@ const HomePage = () => {
                                     <div className="col-span-2 flex items-center justify-end gap-2">
                                         <button 
                                             className="p-2 hover:bg-slate-200 rounded-md transition-colors"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                // Edit functionality here
-                                            }}
                                         >
                                             <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -198,10 +175,6 @@ const HomePage = () => {
                                         </button>
                                         <button 
                                             className="p-2 hover:bg-red-100 rounded-md transition-colors"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                // Delete functionality here
-                                            }}
                                         >
                                             <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -242,7 +215,7 @@ const HomePage = () => {
                 <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-between items-start mb-4">
                         <h2 className="text-xl font-bold text-slate-800">{selectedTask.title}</h2>
-                        <button onClick={() => setSelectedTask(null)} className="text-slate-400 hover:text-slate-600">
+                        <button onClick={() => setSelectedTask(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -251,7 +224,7 @@ const HomePage = () => {
                     <div className="space-y-4">
                         <div>
                             <p className="text-sm font-medium text-slate-600 mb-1">Description</p>
-                            <p className="text-slate-700">{selectedTask.desc || 'No description provided'}</p>
+                            <p className="text-slate-700">{selectedTask.description || 'No description provided'}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -276,21 +249,87 @@ const HomePage = () => {
             </div>
         )}
 
-        {/* Add Task Modal Placeholder */}
-        {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setIsModalOpen(false)}>
-                <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
-                    <h2 className="text-xl font-bold text-slate-800 mb-4">Add New Task</h2>
-                    <p className="text-slate-600">Form to add new task will be implemented here...</p>
-                    <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="mt-4 px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg transition-colors"
-                    >
-                        Close
-                    </button>
-                </div>
+        <Dialog open={isOpen} as="div" className="relative z-50" onClose={()=> {setIsOpen(false),setInputValues(initialInputValues)}}>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" />
+
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+                <DialogPanel className="w-full max-w-lg rounded-2xl bg-zinc-900 p-8 shadow-2xl border border-white/10">
+                    <DialogTitle className="text-xl font-semibold text-white mb-4">
+                        Create Task
+                    </DialogTitle>
+
+                    <form className="space-y-2" onSubmit={(e)=>e.preventDefault()}>
+                        <div>
+                            <label className="block text-sm text-white/70 mb-2">Title</label>
+                            <input
+                                type="text"
+                                name='title'
+                                value={inputValues.title}
+                                onChange={handleChange}
+                                placeholder="Task title..."
+                                className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm text-white/70 mb-2">Description</label>
+                            <textarea
+                                rows="2"
+                                value={inputValues.description}
+                                name='description'
+                                onChange={handleChange}
+                                placeholder="Task description..."
+                                className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm text-white/70 mb-2">Status</label>
+                                <select name='status' onChange={handleChange} className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option selected value="Pending">Pending</option>
+                                    <option value="In-Progess">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm text-white/70 mb-2">Priority</label>
+                                <select  name='priority' onChange={handleChange} className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option selected>Low</option>
+                                    <option >Medium</option>
+                                    <option >High</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm text-white/70 mb-2">Due Date</label>
+                            <div className="bg-zinc-300 p-3 rounded-sm border border-white/10">
+                                <input type="date" onChange={(e)=> setInputValues({...inputValues, dueDate:e.target.value})} />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4">
+                            <button
+                                type="button"
+                                onClick={()=> {setIsOpen(false),setInputValues(initialInputValues)}}
+                                className="px-4 py-2 rounded-lg bg-zinc-700 text-white hover:bg-zinc-600 transition"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleSubmit}
+                                className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
+                            >
+                                Create Task
+                            </button>
+                        </div>
+                    </form>
+                </DialogPanel>
             </div>
-        )}
+        </Dialog>
     </>
     );
 };

@@ -9,31 +9,44 @@ export let UserContext = createContext();
 const Body = () => {
 
     const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [task, setTask] = useState();
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-       const checkAuth = async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                let res = await api.get("/user");
-                if(res.data.success){
-                    console.log(res.data.data)
-                    setUserData(res.data.data);
+
+                const [userRes, todoRes] = await Promise.all([
+                    api.get("/user"),
+                    api.get("/task")
+                ]);
+
+                console.log("*** ", userRes.data, todoRes.data);
+                if (userRes.data.success) {
+                    setUserData(userRes.data.data);
                 }
-            } catch(err){
-                console.log("some err", err)
-            }finally{
+
+                if (todoRes.data.success) {
+                    setTask(todoRes.data.data);
+                }
+
+            } catch (err) {
+                console.log("Some error:", err);
+            } finally {
                 setLoading(false);
             }
         };
-        checkAuth();  
+        fetchData();
     }, []);
+
 
     if(loading){
         return <div className='text-center'>Loading...</div>
     }
 
     return (
-        <UserContext.Provider value={userData}>
+        <UserContext.Provider value={{userData, task}}>
             <div className='min-h-screen bg-linear-to-br from-slate-50 to-slate-100'>
                 <Navbar />
                 <Outlet />
