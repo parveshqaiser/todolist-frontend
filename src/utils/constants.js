@@ -75,7 +75,7 @@ export const initialInputValues = {
 };
 
 export const formatDate = (dateStr) => {
-    const [day, month, year] = dateStr.split('-');
+    const [year,month,day] = dateStr.split('-');
     const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 };
