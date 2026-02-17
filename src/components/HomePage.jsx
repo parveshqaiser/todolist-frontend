@@ -186,7 +186,6 @@ const HomePage = () => {
                                     onClick={(e) =>{setSelectedTask(task)}}
                                 >
                                     <div className="col-span-4">
-                                        {console.log(task)}
                                         <h3 className="font-medium text-slate-800">{task.title}</h3>
                                         {task.desc && <p className="text-sm text-slate-500 mt-1 truncate">{task.desc}</p>}
                                     </div>
