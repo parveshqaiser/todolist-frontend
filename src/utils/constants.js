@@ -73,3 +73,9 @@ export const initialInputValues = {
     priority: "",
     dueDate :"",
 };
+
+export const formatDate = (dateStr) => {
+    const [day, month, year] = dateStr.split('-');
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};

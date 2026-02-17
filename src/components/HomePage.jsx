@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react'
 
+import React, {useContext, useEffect, useState} from 'react'
 import { UserContext } from './Body';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { getPriorityColor, getStatusColor, initialInputValues } from '../utils/constants';
 import { api } from '../utils/api';
 import toast from 'react-hot-toast';
 import useFetchTask from '../hooks/useFetchTask';
+import { formatDate } from '../utils/constants';
 
 const HomePage = () => {
 
@@ -95,12 +96,6 @@ const HomePage = () => {
             }
         }       
     }   
-
-    const formatDate = (dateStr) => {
-        const [day, month, year] = dateStr.split('-');
-        const date = new Date(year, month - 1, day);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    };
 
     if(loadingTask){
         return null;
