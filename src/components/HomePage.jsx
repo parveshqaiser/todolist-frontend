@@ -195,7 +195,7 @@ const HomePage = () => {
                                 >
                                     <div className="col-span-4">
                                         <h3 className="font-medium text-slate-800">{task.title}</h3>
-                                        {task.desc && <p className="text-sm text-slate-500 mt-1 truncate">{task.desc}</p>}
+                                        {task.description && <p className="text-sm text-slate-500 mt-1 truncate">{task.description.slice(0,20)}...</p>}
                                     </div>
                                     <div className="col-span-2 flex items-center">
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}>
@@ -207,7 +207,7 @@ const HomePage = () => {
                                             {task.priority}
                                         </span>
                                     </div>
-                                    <div className="col-span-2 flex items-center text-sm text-slate-600">
+                                     <div className="col-span-2 flex items-center text-sm text-slate-600">
                                         <svg className="w-4 h-4 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
