@@ -1,18 +1,19 @@
 
-import React, {useContext, useEffect, useState} from 'react'
-import { UserContext } from './Body';
+import React, {useEffect, useState} from 'react'
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { getPriorityColor, getStatusColor, initialInputValues } from '../utils/constants';
 import { api } from '../utils/api';
 import toast from 'react-hot-toast';
 import useFetchTask from '../hooks/useFetchTask';
 import { formatDate } from '../utils/constants';
+import { useAtom } from 'jotai';
+import { userTask } from '../shared/atom';
 
 const HomePage = () => {
 
-    // let {task} = useContext(UserContext);
-    let {userData} = useContext(UserContext);
-    let {loading: loadingTask ,task , refetch} = useFetchTask();
+
+    let {loading: loadingTask , refetch} = useFetchTask();
+    let [task] = useAtom(userTask);
 
     const [tasks, setTasks] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -111,7 +112,7 @@ const HomePage = () => {
     }
 
     if(loadingTask){
-        return null;
+        return <h2>Loading....</h2>
     }
 
     return (
@@ -193,7 +194,7 @@ const HomePage = () => {
                                     className="grid grid-cols-12 min-w-187.5 gap-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer"
                                     onClick={(e) =>{setSelectedTask(task)}}
                                 >
-                                    <div className="col-span-4">
+                                    <div className="col-span-4"  title='Click to View More'>
                                         <h3 className="font-medium text-slate-800">{task.title}</h3>
                                         {task.description && <p className="text-sm text-slate-500 mt-1 truncate">{task.description.slice(0,20)}...</p>}
                                     </div>

@@ -5,11 +5,14 @@ import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/api';
 import { AuthContext } from '../utils/authContext';
+import { isUserAuhtenticated, userInfo } from '../shared/atom';
+import { useSetAtom } from 'jotai';
 
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const setIsAuthenticated = useSetAtom(isUserAuhtenticated)
 
     // let {isAuthenticated,setIsAuthenticated} = useContext(AuthContext);
 
@@ -32,7 +35,7 @@ const LoginPage = () => {
         try {
             let res = await axios.post(`${BASE_URL}/user/login`, data, {withCredentials:true});
             if(res.data.success){
-                // setIsAuthenticated(true);
+                setIsAuthenticated(true);
                 toast.success(res.data.message);
                 setTimeout(()=>{
                     setUsername("");

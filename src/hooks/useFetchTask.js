@@ -1,10 +1,12 @@
 
 import React, { useEffect , useState} from 'react'
 import { api } from '../utils/api';
+import { useSetAtom } from 'jotai';
+import { userTask } from '../shared/atom';
 
 const useFetchTask = () => {
 
-    const [task, setTask] = useState();
+    const setUserTask = useSetAtom(userTask);
     const [loading, setLoading] = useState(true);
 
      const fetchData = async () => {
@@ -12,8 +14,9 @@ const useFetchTask = () => {
             setLoading(true);
             let res = await api.get("/task");
             if(res.data.success){
-                setTask(res.data.data);
-                setLoading(false);            }
+                setUserTask(res.data.data);
+                setLoading(false);
+            }
         } catch (err) {
             console.log("Some error:", err);
         } finally {
@@ -26,7 +29,7 @@ const useFetchTask = () => {
     },[]);
 
     // very imp
-    return {loading,task, refetch : fetchData};
+    return {loading,refetch : fetchData};
 }
 
 export default useFetchTask;
