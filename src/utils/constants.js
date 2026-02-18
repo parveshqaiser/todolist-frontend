@@ -2,7 +2,12 @@
 
 export const weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Ocotber", "November", "December"];
+export const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Ocot", "Nov", "Dec"];
+
+export const displayDate=()=>{
+    let dt = new Date();    
+    return `${weeks[dt.getDay()]}, ${months[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`
+}
 
 export let initialTasks = [
     {
