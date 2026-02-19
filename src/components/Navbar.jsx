@@ -3,6 +3,7 @@ import { Link, useLocation} from "react-router-dom";
 import { useAtom } from "jotai";
 import { userInfo } from "../shared/atom";
 import { displayDate } from "../utils/constants";
+import { logout } from "../utils/logout";
 
 const Navbar = () => {
 
@@ -47,7 +48,7 @@ const Navbar = () => {
                             <p className="text-sm font-medium text-slate-700">{displayDate()}</p>
                             <p className="text-xs text-slate-500">Partly Cloudy · 22°C</p>
                         </div>
-                        <button  className="hover:bg-red-50 p-2 rounded-lg transition-colors group cursor-pointer">
+                        <button onClick={logout} className="hover:bg-red-50 p-2 rounded-lg transition-colors group cursor-pointer">
                             <svg className="w-5 h-5 text-slate-600 group-hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>

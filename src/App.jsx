@@ -1,13 +1,12 @@
 
 import { Toaster } from "react-hot-toast";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
 import Body from "./components/Body";
 import HomePage from "./components/HomePage";
 import ProfilePage from "./components/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import { AuthProvider } from "./utils/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = ()=>{
@@ -16,7 +15,7 @@ const App = ()=>{
 	<>
 	<Toaster position="top-center" reverseOrder={false}></Toaster>
 		<BrowserRouter>	
-			<AuthProvider>
+			{/* <AuthProvider> */}
 				<Routes>
 					<Route index path="/" element={<LoginPage />}/>
 					<Route path="/register" element={<RegisterPage/>}/>
@@ -25,7 +24,7 @@ const App = ()=>{
 						<Route path="profile" element={<ProfilePage />} />
 					</Route>
 				</Routes>
-			</AuthProvider>
+			{/* </AuthProvider> */}
 		</BrowserRouter>
 	</>
 	)

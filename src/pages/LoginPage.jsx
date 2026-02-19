@@ -1,11 +1,10 @@
 
 import axios from 'axios';
-import React, {useContext, useState} from 'react'
+import React, {useState} from 'react'
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/api';
-import { AuthContext } from '../utils/AuthProvider';
-import { isUserAuhtenticated, userInfo } from '../shared/atom';
+import {userInfo } from '../shared/atom';
 import { useSetAtom } from 'jotai';
 
 const LoginPage = () => {

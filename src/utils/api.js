@@ -1,6 +1,7 @@
 
 import axios from "axios";
-import { triggerLogout } from "./authService";
+import { logout } from "./logout";
+
 
 export let BASE_URL = "http://localhost:9000/api/v1";
 
@@ -35,7 +36,7 @@ api.interceptors.response.use((response) => response,
         //  DO NOT intercept refresh endpoint itself
         if (originalRequest.url.includes("/user/generate/accesstoken") || originalRequest.url.includes("/user/logout")) {
             console.log("going in between ");
-            triggerLogout();
+            logout();
             return Promise.reject(error);
         }
 
@@ -49,7 +50,7 @@ api.interceptors.response.use((response) => response,
                 return api(originalRequest);
             } catch (refreshError) {
                 console.log("going in actual logout ");
-                triggerLogout();
+                logout();
                 return Promise.reject(refreshError);
             }
         }

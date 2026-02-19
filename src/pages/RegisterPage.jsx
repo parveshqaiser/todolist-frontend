@@ -22,12 +22,12 @@ import toast from "react-hot-toast";
 			return toast.error("All Fields are required");
 		}
 
-		if(password.length <5){
-			return toast.error("Password min 6 char")
+		if(password.length <=5){
+			return toast.error("Password must be min 6 char")
 		}
 
 		let register = {
-			fullName : fullName.charAt(0).toUpperCase() + fullName.slice(1),
+			fullName,
 			username,
 			password
 		};
@@ -47,9 +47,7 @@ import toast from "react-hot-toast";
 		} catch (error) {
 			toast.error(error?.response?.data?.message || error?.message, {duration:2000})
 		}
-
 	}
-
 
     return (
 	<main className="min-h-screen flex items-center justify-center p-4" style={{background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'}}>
@@ -78,7 +76,11 @@ import toast from "react-hot-toast";
 						type="text"
 						name="fullName"
 						value={form.fullName}
-						onChange={(e)=> setForm({...form , fullName:e.target.value})}
+						onChange={(e)=> {
+							let val = e.target.value;
+							val = val.charAt(0).toUpperCase() + val.slice(1);
+							setForm({...form, fullName:val})
+						}}
 						className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
 						placeholder="Foo Bear"
 					/>

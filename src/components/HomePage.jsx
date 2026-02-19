@@ -38,7 +38,7 @@ const HomePage = () => {
         let {name,value} = e.target;
 
         if(name=="title" || name =="description"){
-            let val = value && value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+            let val = value && value.charAt(0).toUpperCase() + value.slice(1);
            setInputValues({...inputValues,[name]: val});
         }
         else if(name =="status" || name =="priority"){
@@ -352,7 +352,7 @@ const HomePage = () => {
                                     onChange={handleChange} 
                                     className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
-                                    <option selected value="Pending">Pending</option>
+                                    <option value="Pending">Pending</option>
                                     <option value="In-Progress">In Progress</option>
                                     <option value="Completed">Completed</option>
                                 </select>
@@ -366,7 +366,7 @@ const HomePage = () => {
                                     onChange={handleChange} 
                                     className="w-full rounded-lg bg-zinc-800 border border-white/10 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 >
-                                    <option selected>Low</option>
+                                    <option >Low</option>
                                     <option >Medium</option>
                                     <option >High</option>
                                 </select>
