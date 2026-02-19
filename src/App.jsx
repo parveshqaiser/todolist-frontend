@@ -7,7 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import { AuthProvider } from "./utils/authContext";
+import { AuthProvider } from "./utils/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = ()=>{
@@ -16,16 +16,16 @@ const App = ()=>{
 	<>
 	<Toaster position="top-center" reverseOrder={false}></Toaster>
 		<BrowserRouter>	
-			{/* <AuthProvider> */}
+			<AuthProvider>
 				<Routes>
 					<Route index path="/" element={<LoginPage />}/>
 					<Route path="/register" element={<RegisterPage/>}/>
-					<Route path="/home" element={ <Body/>}>
+					<Route path="/home" element={<ProtectedRoute><Body/></ProtectedRoute> }>
 						<Route index element={<HomePage />} />
 						<Route path="profile" element={<ProfilePage />} />
 					</Route>
 				</Routes>
-			{/* </AuthProvider> */}
+			</AuthProvider>
 		</BrowserRouter>
 	</>
 	)

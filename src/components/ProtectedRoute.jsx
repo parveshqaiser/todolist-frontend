@@ -1,16 +1,17 @@
 
-import React, { useContext } from 'react'
-import { AuthContext } from '../utils/authContext';
-import { Navigate } from 'react-router-dom';
+
+import { useAtom } from 'jotai';
+import { useNavigate , Navigate} from 'react-router-dom';
+import { userInfo } from '../shared/atom';
 
 const ProtectedRoute = ({children}) => {
-   
-    let {isAuthenticated} = useContext(AuthContext);
 
+    // const [user] = useAtom(userInfo);
+    let authUser = JSON.parse(localStorage.getItem("user"));
+    console.log(authUser);
 
-    console.log(" from protected route isAuthenticated : ", isAuthenticated);
-
-    if (!isAuthenticated) {
+    if(!authUser)
+    {
         return <Navigate to="/" replace />;
     }
 

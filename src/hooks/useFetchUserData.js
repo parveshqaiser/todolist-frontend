@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { api } from '../utils/api';
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { userInfo } from '../shared/atom';
 
 const useFetchUserData = () => {
 
     const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState(null);
     let setUserInfo = useSetAtom(userInfo);
 
     useEffect(()=>{

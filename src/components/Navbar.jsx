@@ -1,9 +1,5 @@
 
 import { Link, useLocation} from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../utils/authContext";
-import { UserContext } from "./Body";
-import { months, weeks } from "../utils/constants";
 import { useAtom } from "jotai";
 import { userInfo } from "../shared/atom";
 import { displayDate } from "../utils/constants";
@@ -16,6 +12,8 @@ const Navbar = () => {
 
     const loc = useLocation();
 
+    let isHome = loc.pathname === "/home";
+
     return (
         <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
@@ -25,12 +23,22 @@ const Navbar = () => {
                         <h1 className="text-2xl font-bold text-slate-800">My Tasks</h1>
                         <div className="flex items-center gap-2 mt-1">
                             <p className="text-sm ">Welcome back, {userData && <span className="text-yellow-500">{userData?.fullName}</span>} </p>
-                            {loc.pathname !="/home/profile" && <Link to={"/home/profile"} className="hover:bg-blue-300 p-1 rounded transition-colors">
+                            {isHome ? <Link to={"/home/profile"} className="hover:bg-blue-300 p-1 rounded transition-colors">
                                 <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                            </Link>}
-                            
+                            </Link> : 
+                            <Link
+                                to={"/home"}
+                                className="hover:bg-blue-300 p-1 rounded transition-colors"
+                            >
+                                <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M3 9.75L12 3l9 6.75M4.5 10.5V20a1 1 0 001 1H9v-6h6v6h3.5a1 1 0 001-1v-9.5"
+                                    />
+                                </svg>
+                            </Link>
+                            }                            
                         </div>
                     </div>
 
@@ -81,3 +89,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+ 

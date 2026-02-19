@@ -1,22 +1,26 @@
 
-import React, {useContext, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { api } from '../utils/api';
-import { UserContext } from './Body';
 import toast from 'react-hot-toast';
+import { userInfo } from '../shared/atom';
+import { useAtom } from 'jotai';
+import useFetchUserData from '../hooks/useFetchUserData';
 
 const ProfilePage = () => {
 
-	let {userData} = useContext(UserContext);
+	// let {fetch} = useFetchUserData();
+	let [userData] = useAtom(userInfo);
 
     const [fullName, setFullName] = useState(userData?.fullName);
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(fullName);
 
-    const handleUpdate = async() => {
+    const handleUpdateName = async() => {
 		try {
 			let res = await api.patch(`user/${userData?._id}`,{fullName : tempName});
 			if(res.data.message){
                 toast.success(res.data.message);
+				// fetch();
  				setIsEditing(false);
 			}
 		} catch (error) {
@@ -53,8 +57,8 @@ const ProfilePage = () => {
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 							</svg>
 						</div>
-						<h2 className="text-2xl font-bold mb-1">{userData && userData?.fullName || "John Doe"}</h2>
-						<p className="text-blue-100 text-sm mb-4">@ {userData?.username}</p>
+						<h2 className="text-2xl font-bold mb-1">{fullName || "John Doe"}</h2>
+						<p className="text-blue-100 text-sm mb-4">@ {userData?.username || "johdoe"}</p>
 						<div className="flex gap-4 text-center">
 							<div>
 								<p className="text-2xl font-bold">{stats.currentStreak}</p>
@@ -78,7 +82,7 @@ const ProfilePage = () => {
 							<label className="block text-sm font-medium text-slate-600 mb-2">Username</label>
 							<input
 								type="text"
-								value={userData?.username}
+								value={userData?.username || "abc"}
 								readOnly
 								className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed"
 							/>
@@ -116,7 +120,7 @@ const ProfilePage = () => {
 						{isEditing && (
 							<div className="flex gap-2">
 								<button
-									onClick={handleUpdate}
+									onClick={handleUpdateName}
 									className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
 								>
 									Save Changes

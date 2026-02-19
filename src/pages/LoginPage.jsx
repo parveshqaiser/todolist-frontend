@@ -4,7 +4,7 @@ import React, {useContext, useState} from 'react'
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/api';
-import { AuthContext } from '../utils/authContext';
+import { AuthContext } from '../utils/AuthProvider';
 import { isUserAuhtenticated, userInfo } from '../shared/atom';
 import { useSetAtom } from 'jotai';
 
@@ -12,16 +12,12 @@ const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const setIsAuthenticated = useSetAtom(isUserAuhtenticated)
-
-    // let {isAuthenticated,setIsAuthenticated} = useContext(AuthContext);
-
     const [isDisable, setIsDisable] = useState(false);
 
     const navigate = useNavigate();
+    const setUserInfo = useSetAtom(userInfo);
 
     const handleLogin =async ()=>{
-
         let data = {
             username : username.trim(),
             password : password.trim(),
@@ -35,14 +31,15 @@ const LoginPage = () => {
         try {
             let res = await axios.post(`${BASE_URL}/user/login`, data, {withCredentials:true});
             if(res.data.success){
-                setIsAuthenticated(true);
+                setUserInfo(res.data.data);
+                localStorage.setItem("user", JSON.stringify(res.data.data));
                 toast.success(res.data.message);
                 setTimeout(()=>{
                     setUsername("");
                     setPassword("");
                     setIsDisable(false);
                     navigate("/home")
-                },1800)
+                },2000)
             }            
         } catch (error) {
             setIsDisable(false);

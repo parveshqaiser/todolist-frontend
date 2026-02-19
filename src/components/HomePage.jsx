@@ -261,7 +261,7 @@ const HomePage = () => {
 
         {/* Task Detail Modal */}
         {selectedTask && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setSelectedTask(null)}>
+            <main className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setSelectedTask(null)}>
                 <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6">
                     <div className="flex justify-between items-start mb-4">
                         <h2 className="text-xl font-bold text-slate-800">{selectedTask.title}</h2>
@@ -271,10 +271,10 @@ const HomePage = () => {
                             </svg>
                         </button>
                     </div>
-                    <div className="space-y-4">
+                    <section className="space-y-3">
                         <div>
                             <p className="text-sm font-medium text-slate-600 mb-1">Description</p>
-                            <p className="text-slate-700">{selectedTask.description || 'No description provided'}</p>
+                            <p className="text-slate-700 text-right">{selectedTask.description || 'No description provided'}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -290,15 +290,25 @@ const HomePage = () => {
                                 </span>
                             </div>
                         </div>
-                        <div>
-                            <p className="text-sm font-medium text-slate-600 mb-1">Due Date</p>
-                            <p className="text-slate-700">{formatDate(selectedTask.dueDate)}</p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <p className="text-sm font-medium text-slate-600 mb-1">Created On</p>
+                                <p className={`text-slate-700`}>
+                                    {formatDate(selectedTask.createdAt.split("T")[0])}
+                                </p>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-slate-600 mb-1">Due Date</p>
+                                <p className="text-slate-700">{formatDate(selectedTask.dueDate)}</p>
+                            </div>
                         </div>
-                    </div>
+                        
+                    </section>
                 </div>
-            </div>
+            </main>
         )}
 
+        {/* add edit modal */}
         <Dialog open={isOpen} as="div" className="relative z-50" onClose={()=> {setIsOpen(false),setInputValues(initialInputValues)}}>
             <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" />
 
@@ -374,14 +384,14 @@ const HomePage = () => {
                             <button
                                 type="button"
                                 onClick={()=> {setIsOpen(false), setIsEdit(false),setInputValues(initialInputValues)}}
-                                className="px-4 py-2 rounded-lg bg-zinc-700 text-white hover:bg-zinc-600 transition"
+                                className="px-4 py-2 rounded-lg bg-zinc-700 text-white hover:bg-zinc-600 transition cursor-pointer"
                             >
                                 Cancel
                             </button>
 
                             <button
                                 onClick={handleSubmit}
-                                className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
+                                className="cursor-pointer px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
                             >
                                 {isEdit ? "Update Task" : "Create Task"}
                             </button>

@@ -10,11 +10,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
     const navigate = useNavigate();
-
-    console.log("from auth content ", isAuthenticated);
 
     let logout = async () => {
         try {
@@ -23,9 +19,8 @@ export const AuthProvider = ({ children }) => {
                 toast.success(res.data.message);
             }
         } catch (error) {
-             toast.error(error?.response?.data?.message || error?.message, {duration:2000})
+            toast.error(error?.response?.data?.message || error?.message, {duration:2000})
         } finally {
-            setIsAuthenticated(false);
             navigate("/");
         }
     };
@@ -35,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     },[logout]);    
 
     return (
-        <AuthContext.Provider value={{isAuthenticated,setIsAuthenticated,logout}}>
+        <AuthContext.Provider value={{logout}}>
             {children}
         </AuthContext.Provider>
     );
