@@ -59,7 +59,6 @@ const HomePage = () => {
             status : inputValues.status || "Pending",
             priority : inputValues.priority || "Low"
         };
-        // console.log(createTask);
 
         let updateTask = {
             title : inputValues.title,

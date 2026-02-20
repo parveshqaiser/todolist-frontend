@@ -18,7 +18,7 @@ const useFetchTask = () => {
                 setLoading(false);
             }
         } catch (err) {
-            console.log("Some error:", err);
+            // console.log("Some error:", err);
         } finally {
             setLoading(false);
         }

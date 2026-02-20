@@ -32,13 +32,9 @@ import toast from "react-hot-toast";
 			password
 		};
 
-		console.log(register);
 		try {
 			let res = await api.post("/user", register);
-			console.log(res.data);
-
-
-			 if(res.data.message){
+			if(res.data.message){
                 toast.success(res.data.message);
 				setTimeout(()=>{
 					navigate("/");

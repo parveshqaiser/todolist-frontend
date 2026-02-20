@@ -8,7 +8,6 @@ const ProtectedRoute = ({children}) => {
 
     // const [user] = useAtom(userInfo);
     let authUser = JSON.parse(localStorage.getItem("user"));
-    console.log(authUser);
 
     if(!authUser)
     {

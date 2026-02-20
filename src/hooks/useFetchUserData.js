@@ -19,12 +19,11 @@ const useFetchUserData = () => {
             setLoading(true);
             let res = await api.get("/user");
             if(res.data.success){
-                // setUserData(res.data.data);
                 setUserInfo(res.data.data)
                 setLoading(false);
             }
         } catch (err) {
-            console.log("Some error:", err);
+            // console.log("Some error:", err);
         } finally {
             setLoading(false);
         }
