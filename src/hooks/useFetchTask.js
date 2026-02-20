@@ -14,7 +14,7 @@ const useFetchTask = () => {
             setLoading(true);
             let res = await api.get("/task");
             if(res.data.success){
-                setUserTask(res.data.data);
+                setUserTask(res.data);
                 setLoading(false);
             }
         } catch (err) {

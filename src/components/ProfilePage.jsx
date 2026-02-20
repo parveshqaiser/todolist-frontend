@@ -12,6 +12,7 @@ const ProfilePage = () => {
 	// let {fetch} = useFetchUserData();
 	let [userData] = useAtom(userInfo);
 	let [task] = useAtom(userTask);
+	console.log(task);
 
     const [fullName, setFullName] = useState(userData?.fullName);
     const [isEditing, setIsEditing] = useState(false);
@@ -31,13 +32,13 @@ const ProfilePage = () => {
     };
 
     const stats = {
-        totalTasks: 47,
-        completedOnTime: 35,
-        inProgress: 8,
-        failed: 4,
-        completionRate: 50,
-        currentStreak: 12,
-        longestStreak: 28
+        totalTasks: task?.count || 0,
+		completed : task?.data?.filter(t => t.status === 'Completed').length,
+        inProgress: task?.data?.filter(t => t.status === 'In-Progress').length,
+        missedTask: task?.missedTask || 0,
+        completionRate: Math.round(task?.onTimePercentage || 0) ||0,
+        currentStreak: 12, // useless
+        longestStreak: 28 // useless
     };
 
     return (
@@ -153,7 +154,7 @@ const ProfilePage = () => {
 							<p className="text-sm text-slate-500">Total Tasks</p>
 						</div>
 						<div className="text-center p-4 bg-green-50 rounded-xl">
-							<p className="text-3xl font-bold text-green-600 mb-1">{stats.completedOnTime}</p>
+							<p className="text-3xl font-bold text-green-600 mb-1">{stats.completed}</p>
 							<p className="text-sm text-green-700">Completed</p>
 						</div>
 						<div className="text-center p-4 bg-blue-50 rounded-xl">
@@ -161,7 +162,7 @@ const ProfilePage = () => {
 							<p className="text-sm text-blue-700">In Progress</p>
 						</div>
 						<div className="text-center p-4 bg-red-50 rounded-xl">
-							<p className="text-3xl font-bold text-red-600 mb-1">{stats.failed}</p>
+							<p className="text-3xl font-bold text-red-600 mb-1">{stats.missedTask}</p>
 							<p className="text-sm text-red-700">Missed</p>
 						</div>
 					</div>
