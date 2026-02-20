@@ -112,7 +112,7 @@ const HomePage = () => {
     }
 
     if(loadingTask){
-        return <h2>Loading....</h2>
+        return <div className='text-center text-red-600 text-4xl'>Loading...</div>
     }
 
     return (
@@ -179,7 +179,7 @@ const HomePage = () => {
                         <div className="col-span-2 text-right">Actions</div>
                     </div>
 
-                    <div className="max-h-[calc(100vh-320px)] overflow-y-auto" >
+                    <div className="max-h-[calc(100vh-250px)] overflow-y-auto" >
                         {Array.isArray(filteredTasks) && filteredTasks?.length === 0 ? (
                             <div className="text-center py-12">
                                 <svg className="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,7 +239,7 @@ const HomePage = () => {
                 </div>
             </div>
 
-            <div className="md:mt-6 mt-3 grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2">
+            {/* <div className="md:mt-6 mt-3 grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2">
                 <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
                     <p className="text-sm text-slate-500 mb-1">Total Tasks</p>
                     <p className="text-2xl font-bold text-slate-800">{tasks.length}</p>
@@ -256,7 +256,7 @@ const HomePage = () => {
                     <p className="text-sm text-slate-500 mb-1">Completed</p>
                     <p className="text-2xl font-bold text-green-600">{tasks.filter(t => t.status === 'Completed').length}</p>
                 </div>
-            </div>
+            </div> */}
         </section>
 
         {/* Task Detail Modal */}

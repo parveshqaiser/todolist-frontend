@@ -2,14 +2,16 @@
 import React, {useEffect, useState } from 'react';
 import { api } from '../utils/api';
 import toast from 'react-hot-toast';
-import { userInfo } from '../shared/atom';
+import { userInfo, userTask } from '../shared/atom';
 import { useAtom } from 'jotai';
 import useFetchUserData from '../hooks/useFetchUserData';
+import { formatDate } from '../utils/constants';
 
 const ProfilePage = () => {
 
 	// let {fetch} = useFetchUserData();
 	let [userData] = useAtom(userInfo);
+	let [task] = useAtom(userTask);
 
     const [fullName, setFullName] = useState(userData?.fullName);
     const [isEditing, setIsEditing] = useState(false);
@@ -48,8 +50,8 @@ const ProfilePage = () => {
 
 		<section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 			
-			<aside className="lg:col-span-1 space-y-6">
-				{/* Profile Card */}
+			{/* Profile Card */}
+			<aside className="lg:col-span-1 space-y-6">				
 				<div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
 					<div className="flex flex-col items-center text-center">
 						<div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-4 shadow-md">
@@ -61,13 +63,13 @@ const ProfilePage = () => {
 						<p className="text-blue-100 text-sm mb-4">@ {userData?.username || "johdoe"}</p>
 						<div className="flex gap-4 text-center">
 							<div>
-								<p className="text-2xl font-bold">{stats.currentStreak}</p>
-								<p className="text-xs text-blue-100">Day Streak</p>
+								<p className="text-md font-bold">{formatDate(userData?.createdAt?.split("T")[0])}</p>
+								<p className="text-xs text-blue-100">Member Since</p>
 							</div>
 							<div className="w-px bg-blue-400"></div>
 							<div>
-								<p className="text-2xl font-bold">{stats.completionRate}%</p>
-								<p className="text-xs text-blue-100">On-Time Rate</p>
+								<p className="text-md font-bold">{userData?.previousLogin ? userData?.previousLogin : new Date().toLocaleDateString()}</p>
+								<p className="text-xs text-blue-100">Last Login</p>
 							</div>
 						</div>
 					</div>
@@ -137,8 +139,8 @@ const ProfilePage = () => {
 				</div>
 			</aside>
 
-			<aside className="lg:col-span-2 space-y-6">
-				{/* Task Statistics */}
+			{/* Task Statistics */}
+			<aside className="lg:col-span-2 space-y-6">				
 				<div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
 					<div className="flex items-center justify-between mb-6">
 						<h3 className="text-lg font-semibold text-slate-800">Task Statistics</h3>

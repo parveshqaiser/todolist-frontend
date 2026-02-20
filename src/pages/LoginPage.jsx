@@ -65,7 +65,7 @@ const LoginPage = () => {
                 <h1 className="text-4xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
                     Welcome Back
                 </h1>
-            <p className="text-gray-600">Your tasks are waiting for you</p>
+            <p className="text-gray-600"> <b> SprintDo </b> is waiting for you</p>
             </div>
 
             <form className="space-y-5" onSubmit={(e)=> e.preventDefault()}>

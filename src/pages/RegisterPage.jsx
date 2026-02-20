@@ -64,7 +64,7 @@ import toast from "react-hot-toast";
 					</svg>
 				</div>
 				<h1 className="text-2xl font-bold bg-linear-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent mb-2">
-					Hey, Not Joined Yet ?
+					Hey, Not Yet Joined<b> SprintDo </b>?
 				</h1>
 				<p className="text-gray-600">Start organizing your life today</p>
 			</div>

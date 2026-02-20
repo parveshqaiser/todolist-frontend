@@ -21,7 +21,7 @@ const Navbar = () => {
                 {/* for larger devices */}
                 <section className="hidden md:flex justify-between items-center">
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-800">My Tasks</h1>
+                        <h1 className="text-2xl font-bold text-slate-800"><b> SprintDo </b></h1>
                         <div className="flex items-center gap-2 mt-1">
                             <p className="text-sm ">Welcome back, {userData && <span className="text-yellow-500">{userData?.fullName}</span>} </p>
                             {isHome ? <Link to={"/home/profile"} className="hover:bg-blue-300 p-1 rounded transition-colors">

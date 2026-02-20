@@ -11,7 +11,7 @@ const Body = () => {
     let {loading} = useFetchUserData();
    
     if(loading){
-        return <div className='text-center'>Loading...</div>
+        return <div className='text-center text-red-600 text-xl'>Loading...</div>
     }
 
     return (
