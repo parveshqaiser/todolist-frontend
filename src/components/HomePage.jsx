@@ -237,25 +237,6 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <div className="md:mt-6 mt-3 grid md:grid-cols-4 grid-cols-2 md:gap-4 gap-2">
-                <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-                    <p className="text-sm text-slate-500 mb-1">Total Tasks</p>
-                    <p className="text-2xl font-bold text-slate-800">{tasks.length}</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-                    <p className="text-sm text-slate-500 mb-1">In Progress</p>
-                    <p className="text-2xl font-bold text-yellow-500">{tasks.filter(t => t.status === 'In-Progress').length}</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-                    <p className="text-sm text-slate-500 mb-1">Pending</p>
-                    <p className="text-2xl font-bold text-gray-400">{tasks.filter(t => t.status === 'Pending').length}</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-                    <p className="text-sm text-slate-500 mb-1">Completed</p>
-                    <p className="text-2xl font-bold text-green-600">{tasks.filter(t => t.status === 'Completed').length}</p>
-                </div>
-            </div> */}
         </section>
 
         {/* Task Detail Modal */}
@@ -301,7 +282,7 @@ const HomePage = () => {
                                 <p className="text-slate-700">{formatDate(selectedTask.dueDate)}</p>
                             </div>
                         </div>
-                        
+
                     </section>
                 </div>
             </main>
@@ -353,7 +334,7 @@ const HomePage = () => {
                                 >
                                     <option value="Pending">Pending</option>
                                     <option value="In-Progress">In Progress</option>
-                                    <option value="Completed">Completed</option>
+                                    {isEdit && <option value="Completed">Completed</option>}
                                 </select>
                             </div>
 
