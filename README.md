@@ -36,4 +36,18 @@ TailwindCSS – Utility-first CSS framework for styling
 
 Jotai – Lightweight state management
 
+Bundler - Vite
+
 Axios – HTTP client with interceptor setup for automatic token refresh
+
+<br/>
+
+⚙️ Installation & Setup
+
+Clone the repository: git clone 
+
+Navigate into the project folder: cd sprintdo-frontend
+
+Install dependencies: npm install
+
+Start development server:npm run dev 🌟
