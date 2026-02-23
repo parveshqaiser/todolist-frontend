@@ -50,4 +50,4 @@ Navigate into the project folder: cd sprintdo-frontend
 
 Install dependencies: npm install
 
-Start development server:npm run dev 🌟
+Start development server: npm run dev 🌟
