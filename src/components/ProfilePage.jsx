@@ -12,7 +12,6 @@ const ProfilePage = () => {
 	// let {fetch} = useFetchUserData();
 	let [userData] = useAtom(userInfo);
 	let [task] = useAtom(userTask);
-	console.log(task);
 
     const [fullName, setFullName] = useState(userData?.fullName);
     const [isEditing, setIsEditing] = useState(false);
@@ -31,13 +30,15 @@ const ProfilePage = () => {
 		}
     };
 
+	console.log(task);
+
     const stats = {
         totalTasks: task?.count || 0,
 		completed : task?.data?.filter(t => t.status === 'Completed').length,
         inProgress: task?.data?.filter(t => t.status === 'In-Progress').length,
         missedTask: task?.missedTask || 0,
         completionRate: Math.round(task?.onTimePercentage || 0) ||0,
-        currentStreak: 12, // useless
+        lastTaskCreated: (task?.lastTaskCreated?.createdAt?.split("T")[0]),
         longestStreak: 28 // useless
     };
 
@@ -194,12 +195,9 @@ const ProfilePage = () => {
 									</svg>
 								</div>
 								<div>
-									<p className="font-medium text-slate-800">Current Streak</p>
-									<p className="text-sm text-slate-500">{stats.currentStreak} days</p>
+									<p className="font-medium text-slate-800">Last Task Created</p>
+									<p className="text-sm text-slate-500">{stats.lastTaskCreated}</p>
 								</div>
-							</div>
-							<div className="text-right">
-								<p className="text-sm text-slate-500">Best: {stats.longestStreak} days</p>
 							</div>
 						</div>
 
@@ -213,20 +211,6 @@ const ProfilePage = () => {
 								<div>
 									<p className="font-medium text-slate-800">Average Completion Time</p>
 									<p className="text-sm text-slate-500">2.3 days per task</p>
-								</div>
-							</div>
-						</div>
-
-						<div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-							<div className="flex items-center gap-3">
-								<div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-									<svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-									</svg>
-								</div>
-								<div>
-									<p className="font-medium text-slate-800">Most Productive Day</p>
-									<p className="text-sm text-slate-500">Monday (14 tasks)</p>
 								</div>
 							</div>
 						</div>
