@@ -7,7 +7,8 @@ import HomePage from "./components/HomePage";
 import ProfilePage from "./components/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";; 
+import PublicRoute from "./components/PublicRoute";
 
 const App = ()=>{
 	
@@ -17,8 +18,8 @@ const App = ()=>{
 		<BrowserRouter>	
 			{/* <AuthProvider> */}
 				<Routes>
-					<Route index path="/" element={<LoginPage />}/>
-					<Route path="/register" element={<RegisterPage/>}/>
+					<Route index path="/" element={<PublicRoute> <LoginPage /></PublicRoute>}/>
+					<Route path="/register" element={<PublicRoute> <RegisterPage/> </PublicRoute>}/>
 					<Route path="/home" element={<ProtectedRoute><Body/></ProtectedRoute> }>
 						<Route index element={<HomePage />} />
 						<Route path="profile" element={<ProfilePage />} />

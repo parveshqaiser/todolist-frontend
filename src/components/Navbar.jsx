@@ -1,17 +1,30 @@
 
 import { Link, useLocation} from "react-router-dom";
-import { useAtom } from "jotai";
-import { userInfo } from "../shared/atom";
+import { useAtom} from "jotai";
+import { userInfo, userTask } from "../shared/atom";
 import { displayDate } from "../utils/constants";
 import { logout } from "../utils/logout";
+import { useResetAtom } from "jotai/utils";
 
 const Navbar = () => {
 
     let [userData] = useAtom(userInfo);
+    const resetUserInfo = useResetAtom(userInfo);
+    const resetUserTask = useResetAtom(userTask);
 
     const loc = useLocation();
 
     let isHome = loc.pathname === "/home";
+
+    function handleLogout(){
+        resetUserInfo();
+        resetUserTask();
+        setTimeout(()=>{
+            logout();
+        },1500);
+    }
+
+    console.log(userData);
 
     return (
         <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
@@ -85,7 +98,7 @@ const Navbar = () => {
                                 <p className="text-xs sm:text-sm font-medium text-slate-700">{displayDate()}</p>
                                 <p className="text-[10px] sm:text-xs text-slate-500">22°C</p>
                             </div>
-                            <button onClick={logout} className="hover:bg-red-50 p-1.5 sm:p-2 rounded-lg transition-colors group shrink-0 cursor-pointer">
+                            <button onClick={handleLogout} className="hover:bg-red-50 p-1.5 sm:p-2 rounded-lg transition-colors group shrink-0 cursor-pointer">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600 group-hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>

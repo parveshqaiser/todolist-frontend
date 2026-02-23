@@ -1,11 +1,14 @@
 
 
+
 import { refreshApi } from "./api";
 import toast from "react-hot-toast";
 
 let isLoggingOut = false;
 
 export const logout = async () => {
+
+
     if (isLoggingOut) return;
         isLoggingOut = true;
 
@@ -16,6 +19,7 @@ export const logout = async () => {
         }
         localStorage.removeItem("user");
         localStorage.removeItem("userInfo");
+
     } catch (error) {
         // console.log("err ", error);
         toast.error(error?.response?.data?.message || error?.message, {duration:2000})
