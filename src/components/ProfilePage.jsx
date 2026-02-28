@@ -196,7 +196,7 @@ const ProfilePage = () => {
 								</div>
 								<div>
 									<p className="font-medium text-slate-800">Last Task Created</p>
-									<p className="text-sm text-slate-500">{stats.lastTaskCreated}</p>
+									<p className="text-sm text-slate-500">{stats.lastTaskCreated || "No Task Added Yet"}</p>
 								</div>
 							</div>
 						</div>

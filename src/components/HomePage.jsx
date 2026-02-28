@@ -111,7 +111,7 @@ const HomePage = () => {
     }
 
     if(loadingTask){
-        return <div className='text-center text-red-600 text-4xl'>Loading...</div>
+        return <div className='text-center text-red-600 text-lg'>Loading...</div>
     }
 
     return (

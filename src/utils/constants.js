@@ -1,6 +1,6 @@
 
 
-export const weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Ocot", "Nov", "Dec"];
 
