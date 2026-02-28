@@ -187,10 +187,13 @@ const HomePage = () => {
                                 <p className="text-slate-500">No tasks found</p>
                             </div>
                         ) : (
-                            filteredTasks?.map((task) => (
+                            filteredTasks?.map((task) => {
+                                let dbDate = new Date(task?.dueDate);
+                                let now = new Date();
+                                return(
                                 <div
                                     key={task.id}
-                                    className="grid grid-cols-12 min-w-187.5 gap-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer"
+                                    className={`${(dbDate < now) &&(task.status !='Completed') ? "bg-red-100" : ""} grid grid-cols-12 min-w-187.5 gap-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer`}
                                     onClick={(e) =>{setSelectedTask(task)}}
                                 >
                                     <div className="col-span-4"  title='Click to View More'>
@@ -213,10 +216,11 @@ const HomePage = () => {
                                         </svg>
                                         {formatDate(task.dueDate)}
                                     </div>
-                                    <div className="col-span-2 flex items-center justify-end gap-2">
+                                    <div className="col-span-2 flex items-center justify-end gap-3">
                                         <button
+                                            disabled={task.status=="Completed" || dbDate < now}
+                                            className="p-2 hover:bg-slate-200 rounded-md transition-colors cursor-pointer"
                                             onClick={(e)=>{e.stopPropagation(), setInputValues(task),setIsEdit(true), setIsOpen(true)}} 
-                                            className="p-2 hover:bg-slate-200 rounded-md transition-colors"
                                         >
                                             <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -232,7 +236,8 @@ const HomePage = () => {
                                         </button>
                                     </div>
                                 </div>
-                            ))
+                                )
+                            })
                         )}
                     </div>
                 </div>

@@ -65,9 +65,9 @@ export const getStatusColor = (status) => {
         case 'In-Progress': 
             return 'bg-yellow-500 text-white';
         case 'Pending': 
-            return 'bg-gray-400 text-white';
+            return 'bg-blue-400 text-white';
         default: 
-            return 'bg-gray-400 text-white';
+            return 'bg-blue-400 text-white';
     }
 };
 
