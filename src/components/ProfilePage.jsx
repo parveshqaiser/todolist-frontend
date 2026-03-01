@@ -30,8 +30,6 @@ const ProfilePage = () => {
 		}
     };
 
-	console.log(task);
-
     const stats = {
         totalTasks: task?.count || 0,
 		completed : task?.data?.filter(t => t.status === 'Completed').length,
