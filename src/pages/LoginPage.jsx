@@ -101,13 +101,13 @@ const LoginPage = () => {
 
             <div className="mt-6 text-center">
                 <p className="text-gray-600">
-                    Don't have an account?{' '}
+                    Don't have an account? &nbsp;
                     <Link to={"/register"}>
-                    <button
-                        className="text-purple-600 font-bold hover:text-pink-600 transition-colors cursor-pointer"
-                    >
-                        Create one
-                    </button>
+                        <button
+                            className="text-purple-600 font-bold hover:text-pink-600 transition-colors cursor-pointer"
+                        >
+                            Create one
+                        </button>
                     </Link>
                 </p>
             </div>
