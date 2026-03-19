@@ -35,7 +35,7 @@ api.interceptors.response.use((response) => response,
 
         //  DO NOT intercept refresh endpoint itself
         if (originalRequest.url.includes("/user/generate/accesstoken") || originalRequest.url.includes("/user/logout")) {
-            console.log("going in between ");
+            // console.log("going in between ");
             logout();
             return Promise.reject(error);
         }
@@ -49,7 +49,7 @@ api.interceptors.response.use((response) => response,
 
                 return api(originalRequest);
             } catch (refreshError) {
-                console.log("going in actual logout ");
+                // console.log("going in actual logout ");
                 logout();
                 return Promise.reject(refreshError);
             }

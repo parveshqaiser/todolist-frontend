@@ -128,4 +128,4 @@ import toast from "react-hot-toast";
 	);
 };
 
-  export default RegisterPage;
+export default RegisterPage;
