@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";; 
 import PublicRoute from "./components/PublicRoute";
+import PageNotFound from "./pages/PageNotFound";
 
 const App = ()=>{
 	
@@ -24,6 +25,7 @@ const App = ()=>{
 						<Route index element={<HomePage />} />
 						<Route path="profile" element={<ProfilePage />} />
 					</Route>
+					<Route path='*' element={<PageNotFound />}></Route>
 				</Routes>
 			{/* </AuthProvider> */}
 		</BrowserRouter>
