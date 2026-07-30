@@ -19,6 +19,7 @@ export const logout = async () => {
         }
         localStorage.removeItem("user");
         localStorage.removeItem("userInfo");
+        localStorage.removeItem("userTask");
 
     } catch (error) {
         // console.log("err ", error);
@@ -26,6 +27,7 @@ export const logout = async () => {
     } finally {
         localStorage.removeItem("user");
         localStorage.removeItem("userInfo");
+        localStorage.removeItem("userTask");
         window.location.replace("/");
        
     }
