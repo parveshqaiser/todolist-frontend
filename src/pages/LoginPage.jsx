@@ -6,12 +6,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/api';
 import {userInfo } from '../shared/atom';
 import { useSetAtom } from 'jotai';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isDisable, setIsDisable] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const setUserInfo = useSetAtom(userInfo);
@@ -82,13 +84,21 @@ const LoginPage = () => {
 
                 <div className="space-y-2">
                     <label className="block text-sm font-semibold text-gray-700">Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:bg-white outline-none transition-all duration-200"
-                        placeholder="Enter your password"
-                    />
+                    <div className='relative'>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:bg-white outline-none transition-all duration-200"
+                            placeholder="Enter your password"
+                        />
+                        <button
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
                 </div>
 
                 <button
