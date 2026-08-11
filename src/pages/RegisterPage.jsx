@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../utils/api";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
  const RegisterPage = () => {
 
 	const navigate = useNavigate();
+	const [showPassword, setShowPassword] = useState(false);
 
 	const [form, setForm] = useState({
 		fullName :"",
@@ -95,15 +97,27 @@ import toast from "react-hot-toast";
 				</div>
 
 				<div className="space-y-2">
-					<label className="block text-sm font-semibold text-gray-700">Password</label>
-					<input
-						type="password"
-						value={form.password}
-						minLength={6}
-						onChange={(e)=> setForm({...form , password:e.target.value})}
-						className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
-						placeholder="Min. 6 characters"
-					/>
+					<label className="block text-sm font-semibold text-gray-700">
+						Password
+					</label>
+
+					<div className="relative">
+						<input
+							type={showPassword ? "text" : "password"}
+							value={form.password}
+							minLength={6}
+							onChange={(e) => setForm({ ...form, password: e.target.value })}
+							className="w-full px-4 py-3 pr-12 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:bg-white outline-none transition-all duration-200"
+							placeholder="Min. 6 characters"
+						/>
+
+						<button
+							onClick={() => setShowPassword(!showPassword)}
+							className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+						>
+							{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+						</button>
+					</div>
 				</div>
 
 				<button
