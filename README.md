@@ -51,3 +51,5 @@ Navigate into the project folder: cd sprintdo-frontend
 Install dependencies: npm install
 
 Start development server: npm run dev 🌟
+
+LIVE URL : https://todolist-frontend-r46f.onrender.com
