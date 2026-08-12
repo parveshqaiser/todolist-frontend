@@ -3,7 +3,8 @@ import axios from "axios";
 import { logout } from "./logout";
 
 
-export let BASE_URL = "http://localhost:9000/api/v1";
+// export let BASE_URL = "http://localhost:9000/api/v1";
+export let BASE_URL = "https://todo-backend-e32n.onrender.com/api/v1";
 
 export const api = axios.create({
     baseURL : BASE_URL,

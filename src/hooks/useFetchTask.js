@@ -1,6 +1,6 @@
 
 import React, { useEffect , useState} from 'react'
-import { api } from '../utils/api';
+import { api, BASE_URL } from '../utils/api';
 import { useSetAtom } from 'jotai';
 import { userTask } from '../shared/atom';
 
