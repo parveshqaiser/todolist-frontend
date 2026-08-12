@@ -30,6 +30,7 @@ const LoginPage = () => {
         }
 
         try {
+            setIsDisable(true);
             let res = await axios.post(`${BASE_URL}/user/login`, data, {withCredentials:true});
             if(res.data.success){
                 setUserInfo(res.data.data);
@@ -40,7 +41,7 @@ const LoginPage = () => {
                     setPassword("");
                     setIsDisable(false);
                     navigate("/home")
-                },2000)
+                },1000)
             }            
         } catch (error) {
             setIsDisable(false);
@@ -102,8 +103,11 @@ const LoginPage = () => {
                 </div>
 
                 <button
-                onClick={handleLogin}
-                    className="w-full cursor-pointer bg-linear-to-r from-purple-600 to-pink-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    disabled={isDisable}
+                    onClick={handleLogin}
+                    className={`w-full bg-linear-to-r from-purple-600 to-pink-600
+                        text-white py-3.5 rounded-xl font-bold shadow-lg 
+                        hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ${isDisable? "cursor-not-allowed": "cursor-pointer"} `}
                 >
                     Sign In
                 </button>
