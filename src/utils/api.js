@@ -55,6 +55,6 @@ api.interceptors.response.use((response) => response,
                 return Promise.reject(refreshError);
             }
         }
-    return Promise.reject(error);
-  }
+        return Promise.reject(error);
+    }
 );
