@@ -259,7 +259,7 @@ const HomePage = () => {
                     <section className="space-y-3">
                         <div>
                             <p className="text-sm font-medium text-slate-600 mb-1">Description</p>
-                            <p className="text-slate-700 text-right">{selectedTask.description || 'No description provided'}</p>
+                            <p className="text-orange-500 underline">{selectedTask.description || 'No description provided'}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
