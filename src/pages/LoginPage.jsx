@@ -109,7 +109,7 @@ const LoginPage = () => {
                         text-white py-3.5 rounded-xl font-bold shadow-lg 
                         hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 ${isDisable? "cursor-not-allowed": "cursor-pointer"} `}
                 >
-                    Sign In
+                    {isDisable ? "Loggin in... Please wait" : "Sign In"}
                 </button>
             </form>
 

@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
+	const [isDisable, setIsDisable] = useState(false);
 
 	const [form, setForm] = useState({
 		fullName :"",
@@ -35,14 +36,17 @@ import { Eye, EyeOff } from "lucide-react";
 		};
 
 		try {
+			setIsDisable(true);
 			let res = await api.post("/user", register);
 			if(res.data.message){
                 toast.success(res.data.message);
 				setTimeout(()=>{
 					navigate("/");
+					setIsDisable(false);
 				},1500)
             }     
 		} catch (error) {
+			setIsDisable(false);
 			toast.error(error?.response?.data?.message || error?.message, {duration:2000})
 		}
 	}
@@ -120,11 +124,12 @@ import { Eye, EyeOff } from "lucide-react";
 					</div>
 				</div>
 
+				
 				<button
 					onClick={handleClick}
-					className="w-full cursor-pointer bg-linear-to-r from-pink-600 to-orange-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+					className={`w-full ${!isDisable ? "cursor-pointer" : "cursor-not-allowed"} bg-linear-to-r from-pink-600 to-orange-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200`}
 				>
-					Create Account
+					{isDisable ? "Submiting.. Please Wait" : "Create Account"}
 				</button>
 			</form>
 
