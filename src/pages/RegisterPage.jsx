@@ -126,6 +126,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 				
 				<button
+					disabled={isDisable}
 					onClick={handleClick}
 					className={`w-full ${!isDisable ? "cursor-pointer" : "cursor-not-allowed"} bg-linear-to-r from-pink-600 to-orange-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200`}
 				>
