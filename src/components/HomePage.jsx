@@ -8,6 +8,7 @@ import useFetchTask from '../hooks/useFetchTask';
 import { formatDate } from '../utils/constants';
 import { useAtom } from 'jotai';
 import { userTask } from '../shared/atom';
+import Spinner from './Spinner';
 
 const HomePage = () => {
 
@@ -110,8 +111,12 @@ const HomePage = () => {
         }
     }
 
+    // if(loadingTask){
+    //     return <div className='text-center text-red-600 text-lg'>Loading... Please Wait</div>
+    // }
+
     if(loadingTask){
-        return <div className='text-center text-red-600 text-lg'>Loading... Please Wait</div>
+        return <Spinner />
     }
 
     return (
